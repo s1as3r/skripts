@@ -43,7 +43,7 @@ def main():
             chdir(directory)
             images_dict = dict(enumerate(images, 1))
 
-            with concurrent.futures.ThreadPoolExecutor() as downloader:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=5) as downloader:
                 downloader.map(download_image, images_dict.values(), images_dict.keys())
 
             chdir('..')
