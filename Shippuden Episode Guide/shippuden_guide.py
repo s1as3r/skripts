@@ -27,25 +27,25 @@ filler = [
 ]
 
 
-def get_ep_name(ep_no: int) -> str:
-    ep_url = 'https://en.wikipedia.org/wiki/List_of_Naruto:_Shippuden_episodes'
-
-    soup = BeautifulSoup(get(ep_url).text, 'html.parser')
+def get_ep_name(ep_no: int, soup: BeautifulSoup) -> str:
     ep = soup.find(id=f'ep{ep_no}').findNext().next[1:-1]
 
     return ep
 
 
-def print_episode(ep):
+def print_episode(ep: int, soup: BeautifulSoup):
     if ep in filler:
-        print(f'{ep:<5} - {get_ep_name(ep):<65} - Filler')
+        print(f'{ep:<5} - {get_ep_name(ep, soup):<65} - Filler')
         return
 
-    print(f'{ep:<5} - {get_ep_name(ep):<65} - Canon')
+    print(f'{ep:<5} - {get_ep_name(ep, soup):<65} - Canon')
     return
 
 
 if __name__ == '__main__':
+    ep_url = 'https://en.wikipedia.org/wiki/List_of_Naruto:_Shippuden_episodes'
+    soup = BeautifulSoup(get(ep_url).text, 'html.parser')
+
     if len(args) > 1:
         print(f'\n{"No.":<5} - {"Episode Name":<65} - Type\n')
 
@@ -53,9 +53,9 @@ if __name__ == '__main__':
             if '-' in i:
                 rng = [int(j) for j in i.split('-')]
                 for k in range(rng[0], rng[1]+1):
-                    print_episode(k)
+                    print_episode(k, soup)
             else:
-                print_episode(int(i))
+                print_episode(int(i), soup)
     else:
         print(help_notice)
 
