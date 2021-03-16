@@ -10,5 +10,5 @@ To get the exact usage instructions of a script, refer to the readme inside the 
 ## Contents
 - [Apply Lyrics](./Apply%20Lyrics/) - Applies Lyrics to each song in the current working directory.
 - [Discord Image Downloader](./Discord%20Image%20Downloader/) - Downloads all the images from a discord channel.
-- [Wallpaper Access Scraper](./WallpaperAccess%20Scraper/) - Scrapes a wallpaperaccess.com collection
+- [Wallpaper Access Scraper](./WallpaperAccess%20Scraper/) - Scrapes a [wallpaperaccess](wallpaperaccess.com) collection
 - [Aniname](./Aniname/) - Get the names of anime episodes and also check if it's filler or not.
