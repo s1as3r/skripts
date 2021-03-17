@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 from os import listdir
 
 from bs4 import BeautifulSoup # BeautifulSoup for scraping lyrics.

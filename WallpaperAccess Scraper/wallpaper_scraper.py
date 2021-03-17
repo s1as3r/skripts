@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 import concurrent.futures
 from os import chdir, mkdir
 from os.path import exists

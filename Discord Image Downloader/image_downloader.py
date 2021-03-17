@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 from selenium import webdriver
 from requests import get
 import concurrent.futures
