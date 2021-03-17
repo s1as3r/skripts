@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 import sys
 import yaml
 from jikanpy import Jikan
@@ -6,6 +7,13 @@ from typing import Tuple, Dict, List
 
 
 def get_all_eps(name: str) -> Dict[int, Tuple[str, bool]]:
+    """
+    `str` `name`: Name of the anime.
+
+    RETURNS `Dict<int, Tuple<str, bool>>`: A dictionary containing an episode's name and filler info.
+
+    Get all the episodes of an anime.
+    """
     client = Jikan()
 
     anime_id = client.search("anime", name)["results"][0]["mal_id"]
@@ -20,13 +28,24 @@ def get_all_eps(name: str) -> Dict[int, Tuple[str, bool]]:
     return ep_dict
 
 
-def save_eps(name: str, eps: Dict[int, Tuple[str, int]]) -> None:
+def save_eps(name: str, eps: Dict[int, Tuple[str, bool]]) -> None:
+    """
+    `str` `name`: name of the file
+    `Dict<int, Tuple<str, bool>>`: An episodes dict as returned by `get_all_eps`
+
+    Saves the episodes' names in a yaml file.
+    """
     with open(f"{name}.yml", "w") as f:
         ep_names = {i: j[0] for i, j in eps.items()}
         f.write(yaml.safe_dump(ep_names))
 
 
 def parse_eps_arg(args: List[str]) -> List[int]:
+    """
+    `List<str>` `args`: A list of strings that are numbers and/or a range (e.g [1, 2, 4, 6-9])
+    
+    RETURNS `List<int>`: A list of integers.
+    """
     eps: List[int] = []
     for arg in args:
         if "-" in arg:
@@ -40,6 +59,9 @@ def parse_eps_arg(args: List[str]) -> List[int]:
 
 
 def parse_args() -> argparse.Namespace:
+    """
+    Parses commandline arguments.
+    """
     parser = argparse.ArgumentParser(
         prog="AniName", description="Get Anime Episode Names"
     )
