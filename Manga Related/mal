@@ -1,0 +1,27 @@
+#!/data/data/com.termux/files/usr/bin/bash
+GREEN='\033[1;32m'
+NC='\033[0m' 
+RED='\033[0;31m'
+CYAN='\033[0;36m'
+
+getInfo() {
+    data=$( curl -Ls $1 )
+    title=$( echo $data | pup 'h1 [itemprop="name"] text{}' )
+    rating=$( echo $data | pup '[itemprop="ratingValue"] text{}' )
+    desc=$( echo $data | pup '[itemprop="description"] text{}' )
+    printf "${GREEN}$title${NC}\n\n${CYAN}$rating${NC}\n\n$desc\n"
+}
+
+search() {
+    query=$( echo $1 | sed 's/ /%20/g')
+    url="https://myanimelist.net/manga.php?q=$query&cat=manga"
+    curl -Ls $url | pup '.pt4 a attr{href}' | head -n1
+}
+
+main() {
+    read -p "Series Title: " query
+    getInfo $( search "$query" )
+    read -n1 -s -p "Press Any Key to Exit."
+}
+
+main 

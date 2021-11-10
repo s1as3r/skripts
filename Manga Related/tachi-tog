@@ -1,0 +1,49 @@
+#!/data/data/com.termux/files/usr/bin/bash
+GREEN='\033[1;32m'
+NC='\033[0m' 
+RED='\033[0;31m'
+CYAN='\033[0;36m'
+URL="https://kaminotou.com/manga/tower-of-god-chapter-"
+TOG="/storage/emulated/0/TachiyomiJ2K/local/Tower Of God"
+
+dld_tog(){
+    chap_dir="$TOG/$1"
+    results=$( curl -s "$URL$1" | 
+        pup '[data-lazy-src^="https://cdn"] attr{data-lazy-src}' )
+    
+    if [[ ${#results} -eq 0 ]];then
+        echo "Not Released Yet"
+        exit 0;
+    fi
+
+    if [ ! -d "$chap_dir" ]; then
+        mkdir "$chap_dir"
+    fi
+
+    cd "$chap_dir"
+
+    printf "${CYAN}Total Images:${NC} ${GREEN}$( echo $results | tr " " "\n" | wc -l )${NC}\n"
+    echo ${results} | tr " " "\n" | parallel -j8 "wget -q {} && printf '${GREEN}•${NC}' || printf '${RED}•${NC}'"
+    echo
+}
+
+main() {
+    if [[ $# -eq 0 ]]; then 
+        extra=$(( $( ls "$TOG" | wc -l ) - 2 ))
+        if [[ $extra -ne 0 ]]; then
+            printf "Deleting ${RED}$extra${NC} Previous Chapters\n"
+        fi
+
+        ls "$TOG" | sort | head -n$extra | xargs -i{} rm -rf "$TOG/{}"
+        ch=$(( $( ls "$TOG" | sort -nr | head -n1 ) + 1 ))
+        dld_tog $ch
+        read -n1 -s -p "Press any key to exit"
+    else
+        for chapter in $@; do
+            printf "${CYAN}Downloading${NC} ${GREEN}$chapter${NC}\n"
+            dld_tog $chapter
+        done
+    fi
+}
+
+main $@
