@@ -42,7 +42,6 @@ main() {
         for chapter in $@; do
             printf "${CYAN}Downloading${NC} ${GREEN}$chapter${NC}\n"
             dld_tog $chapter
-            read -n1 -s -p "Press any key to exit"
         done
     fi
 }
