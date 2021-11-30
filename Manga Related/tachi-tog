@@ -3,13 +3,13 @@ GREEN='\033[1;32m'
 NC='\033[0m' 
 RED='\033[0;31m'
 CYAN='\033[0;36m'
-URL="https://kaminotou.com/manga/tower-of-god-chapter-"
+URL="https://kaminotou.com/manga/tower-of-god-manga-chapter-"
 TOG="/storage/emulated/0/TachiyomiJ2K/local/Tower Of God"
 
 dld_tog(){
     chap_dir="$TOG/$1"
     results=$( curl -s "$URL$1" | 
-        pup '[data-lazy-src^="https://cdn"] attr{data-lazy-src}' )
+        pup 'img.aligncenter[data-lazy-src"] attr{data-lazy-src}' )
     
     if [[ ${#results} -eq 0 ]];then
         echo "Not Released Yet"
