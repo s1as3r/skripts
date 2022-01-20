@@ -2,7 +2,7 @@
 
 Skripts go skrrrrrt!
 
-Scripts that i use(d) sometimes.
+Badly written scripts that I use(d) sometimes.
 
 ## Usage
 
