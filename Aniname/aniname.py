@@ -1,5 +1,7 @@
 #! /usr/bin/env python3
 import sys
+import re
+import os
 import yaml
 from jikanpy import Jikan
 import argparse
@@ -10,7 +12,8 @@ def get_all_eps(name: str) -> Dict[int, Tuple[str, bool]]:
     """
     `str` `name`: Name of the anime.
 
-    RETURNS `Dict<int, Tuple<str, bool>>`: A dictionary containing an episode's name and filler info.
+    RETURNS `Dict<int, Tuple<str, bool>>`: A dictionary containing an
+    episode's name and filler info.
 
     Get all the episodes of an anime.
     """
@@ -19,9 +22,9 @@ def get_all_eps(name: str) -> Dict[int, Tuple[str, bool]]:
     anime_id = client.search("anime", name)["results"][0]["mal_id"]
     anime = client.anime(anime_id, extension="episodes")
     eps = anime["episodes"]
-    l = anime["episodes_last_page"]
-    if l != 1:
-        for i in range(2, l + 1):
+    eps_len = anime["episodes_last_page"]
+    if eps_len != 1:
+        for i in range(2, eps_len + 1):
             eps.extend(client.anime(anime_id, extension="episodes", page=i)["episodes"])
 
     ep_dict = {i["episode_id"]: [i["title"], i["filler"]] for i in eps}
@@ -31,7 +34,8 @@ def get_all_eps(name: str) -> Dict[int, Tuple[str, bool]]:
 def save_eps(name: str, eps: Dict[int, Tuple[str, bool]]) -> None:
     """
     `str` `name`: name of the file
-    `Dict<int, Tuple<str, bool>>`: An episodes dict as returned by `get_all_eps`
+    `Dict<int, Tuple<str, bool>>` `eps`: An episodes dict as returned by
+    `get_all_eps`
 
     Saves the episodes' names in a yaml file.
     """
@@ -42,8 +46,9 @@ def save_eps(name: str, eps: Dict[int, Tuple[str, bool]]) -> None:
 
 def parse_eps_arg(args: List[str]) -> List[int]:
     """
-    `List<str>` `args`: A list of strings that are numbers and/or a range (e.g [1, 2, 4, 6-9])
-    
+    `List<str>` `args`: A list of strings that are numbers
+    and/or a range (e.g [1, 2, 4, 6-9])
+
     RETURNS `List<int>`: A list of integers.
     """
     eps: List[int] = []
@@ -56,6 +61,30 @@ def parse_eps_arg(args: List[str]) -> List[int]:
             eps.append(int(arg))
 
     return eps
+
+
+def apply(eps_data: Dict[int, Tuple[str, bool]], regex: str):
+    """
+    `Dict<int, Tuple<str, bool]]` `eps_data`: An episodes dict as returned by
+    `get_all_eps`
+    
+    `str` `regex`: A regular expression that matches the filenames.
+    Must capture episode number and file extension.
+    """
+    
+    re_pat = re.compile(regex, re.I)
+    for item in os.listdir():
+        m = re_pat.match(item)
+        if m is not None:
+            ep_no = m.groups()[0]
+            ext = m.groups()[1]
+            ep_name = eps_data.get(ep_no) or eps_data.get(int(ep_no))
+            if ep_name is not None:
+                os.rename(item, f"{ep_no} - {ep_name[0]}.{ext}")
+            else:
+                print(f"{ep_no} not in provided data")
+        else:
+            print(f"{regex} doesn't match {item}")
 
 
 def parse_args() -> argparse.Namespace:
@@ -78,6 +107,22 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--save", "-s", action="store_true", help="store the data as yaml file"
     )
+    parser.add_argument(
+        "--apply",
+        "-a",
+        action="store_true",
+        help="Rename anime in the current directory appropriately\n"
+        + "Use in combination with --regex for best results.",
+    )
+    parser.add_argument(
+        "--regex",
+        "-r",
+        metavar="REGEX",
+        type=str,
+        default=r"(\d+).(.*)",
+        help="Regural Expression used to extract the episode no and the file extension"
+        + " from an anime file.\nThe episode no and the extension must be captured.",
+    )
     return parser.parse_args()
 
 
@@ -86,6 +131,10 @@ def main():
     eps_dict = get_all_eps(args.name)
     if len(eps_dict) == 0:
         print(f"Cannot find anime named: {args.name}")
+        sys.exit()
+
+    if args.apply:
+        apply(eps_dict, args.regex)
         sys.exit()
 
     if args.save:
