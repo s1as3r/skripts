@@ -1,6 +1,4 @@
 from bs4 import BeautifulSoup
-from mutagen.easyid3 import ID3
-from mutagen.id3 import USLT
 from requests import get
 
 # Access Token Already Provided.
