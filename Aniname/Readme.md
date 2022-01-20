@@ -1,8 +1,9 @@
-# Aniname
+# AniName
 
-Get names of anime episodes and also check if an episode if filler or not.
+Get names of anime episodes and also check if an episode is filler or not.
+
 I know there are a lot of things that could be done in a better way (argument parsing etc)
-but i'm just too lazy.
+but this works just fine and I'm too lazy.
 
 ## Usage
 
