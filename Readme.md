@@ -4,11 +4,17 @@ Skripts go skrrrrrt!
 
 Badly written scripts that I use(d) sometimes.
 
+Some of these scipts might have become obsolete at some point and might not work.
+
 ## Usage
 
-Before running a script make sure to install it's requirements by running `pip install -r requirements.txt` inside its folder.
+Before running a script make sure to install it's dependencies.
 
-To get the exact usage instructions of a script, refer to the readme inside the folder of the respsctive script.
+Most of these scripts are writeen in python so, usually it's done by just running `pip install -r requirements.txt` inside its folder.
+
+If it's a bash script or a script written in some other lang, refer the readme or look around inside the script itself.
+
+To get the exact usage instructions of a script, refer to the readme of the respsctive script.
 
 ## Contents
 
