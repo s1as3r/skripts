@@ -20,13 +20,21 @@ def get_lyrics(url: str) -> str:
     """
 
     page = get(url)
-    html = BeautifulSoup(page.text, "html.parser")
-    lyrics = html.select_one("div.lyrics").get_text().strip()
+    if not page.ok:
+        return ""
+    
+    html = BeautifulSoup(page.text.replace("<br/>", "\n"), "html.parser")
+    lyrics_div = html.select_one("div.lyrics")
+    if lyrics_div is not None:
+        return lyrics_div.get_text().strip()
 
-    return lyrics
+    lyrics_containers = html.select("div[class^=Lyrics__Container]")
+    lyrics = "\n".join(con.get_text() for con in lyrics_containers)
+    
+    return lyrics.strip()
 
 
-def get_url(query: str) -> dict:
+def get_url(query: str) -> str:
     """
     `str` `query`: Search Query.
 
