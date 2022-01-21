@@ -1,11 +1,12 @@
 #! /usr/bin/env python3
-import sys
-import re
+import argparse
 import os
+import re
+import sys
+from typing import Dict, List, Tuple
+
 import yaml
 from jikanpy import Jikan
-import argparse
-from typing import Tuple, Dict, List
 
 
 def get_all_eps(name: str) -> Dict[int, Tuple[str, bool]]:
@@ -19,10 +20,14 @@ def get_all_eps(name: str) -> Dict[int, Tuple[str, bool]]:
     """
     client = Jikan()
 
-    anime_id = client.search("anime", name)["results"][0]["mal_id"]
-    anime = client.anime(anime_id, extension="episodes")
-    eps = anime["episodes"]
-    eps_len = anime["episodes_last_page"]
+    results = client.search("anime", name)["results"][:10]
+    anime = {i: j for i, j in enumerate(results, 1)}
+    prompt = "\n".join(f"{n:0>2} => {t['title']}" for n, t in anime.items())
+    selection = input(prompt + "\nSelect Anime: ")
+    anime_id = anime[int(selection)]["mal_id"]
+    selected_anime = client.anime(anime_id, extension="episodes")
+    eps = selected_anime["episodes"]
+    eps_len = selected_anime["episodes_last_page"]
     if eps_len != 1:
         for i in range(2, eps_len + 1):
             eps.extend(client.anime(anime_id, extension="episodes", page=i)["episodes"])
@@ -67,19 +72,23 @@ def apply(eps_data: Dict[int, Tuple[str, bool]], regex: str):
     """
     `Dict<int, Tuple<str, bool]]` `eps_data`: An episodes dict as returned by
     `get_all_eps`
-    
+
     `str` `regex`: A regular expression that matches the filenames.
     Must capture episode number and file extension.
     """
-    
+
     re_pat = re.compile(regex, re.I)
     for item in os.listdir():
         m = re_pat.match(item)
         if m is not None:
             ep_no = m.groups()[0]
             ext = m.groups()[1]
-            ep_name = eps_data.get(ep_no) or eps_data.get(int(ep_no))
+            ep_name = eps_data.get(int(ep_no))
+
             if ep_name is not None:
+                if sys.platform == "win32":
+                    ep_name = ep_name[0].replace("/", ",").replace(":", "-")
+                    ep_name = "".join(i for i in ep_name if i not in "\\*?<>|")
                 os.rename(item, f"{ep_no} - {ep_name[0]}.{ext}")
             else:
                 print(f"{ep_no} not in provided data")
