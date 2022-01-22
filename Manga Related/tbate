@@ -8,7 +8,6 @@ if [[ ${#TBATE} -eq 0 ]]; then
     TBATE="/storage/emulated/0/Books/tbate"
 fi
 
-echo $TBATE
 dld() {
     ch=$1
     
@@ -38,3 +37,4 @@ main() {
 }
 
 main $@
+
