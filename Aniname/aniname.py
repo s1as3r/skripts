@@ -9,9 +9,10 @@ import yaml
 from jikanpy import Jikan
 
 
-def get_all_eps(name: str) -> Dict[int, Tuple[str, bool]]:
+def get_all_eps(name: str, select: int = 0) -> Dict[int, Tuple[str, bool]]:
     """
     `str` `name`: Name of the anime.
+    `bool` `select_first`: Instead of showing the prompt, select the `select` result.
 
     RETURNS `Dict<int, Tuple<str, bool>>`: A dictionary containing an
     episode's name and filler info.
@@ -22,9 +23,10 @@ def get_all_eps(name: str) -> Dict[int, Tuple[str, bool]]:
 
     results = client.search("anime", name)["results"][:10]
     anime = {i: j for i, j in enumerate(results, 1)}
-    prompt = "\n".join(f"{n:0>2} => {t['title']}" for n, t in anime.items())
-    selection = input(prompt + "\nSelect Anime: ")
-    anime_id = anime[int(selection)]["mal_id"]
+    if select == 0:
+        prompt = "\n".join(f"{n:0>2} => {t['title']}" for n, t in anime.items())
+        select = input(prompt + "\nSelect Anime: ")
+    anime_id = anime[int(select)]["mal_id"]
     selected_anime = client.anime(anime_id, extension="episodes")
     eps = selected_anime["episodes"]
     eps_len = selected_anime["episodes_last_page"]
@@ -89,7 +91,7 @@ def apply(eps_data: Dict[int, Tuple[str, bool]], regex: str):
                 if sys.platform == "win32":
                     ep_name = ep_name[0].replace("/", ",").replace(":", "-")
                     ep_name = "".join(i for i in ep_name if i not in "\\*?<>|")
-                os.rename(item, f"{ep_no} - {ep_name[0]}.{ext}")
+                os.rename(item, f"{ep_no} - {ep_name}.{ext}")
             else:
                 print(f"{ep_no} not in provided data")
         else:
@@ -132,12 +134,20 @@ def parse_args() -> argparse.Namespace:
         help="Regural Expression used to extract the episode no and the file extension"
         + " from an anime file.\nThe episode no and the extension must be captured.",
     )
+    parser.add_argument(
+        "--select",
+        "-n",
+        type=int,
+        metavar="N",
+        default=0,
+        help="select Nth anime returned by Jikan",
+    )
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
-    eps_dict = get_all_eps(args.name)
+    eps_dict = get_all_eps(args.name, args.select)
     if len(eps_dict) == 0:
         print(f"Cannot find anime named: {args.name}")
         sys.exit()
