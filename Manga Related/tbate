@@ -1,19 +1,23 @@
 #!/data/data/com.termux/files/usr/bin/bash
-TBATE="/storage/emulated/0/Books/tbate"
 GREEN='\033[1;32m'
 NC='\033[0m' 
 RED='\033[0;31m'
 CYAN='\033[0;36m'
 
+if [[ ${#TBATE} -eq 0 ]]; then
+    TBATE="/storage/emulated/0/Books/tbate"
+fi
+
+echo $TBATE
 dld() {
     ch=$1
     
-    data=$( curl -Ls https://lightnovelreader.com/the-beginning-after-the-end/chapter-$ch | pup '#chapterText' )
+    data=$( curl -Ls https://lightnovelreader.com/the-beginning-after-the-end-813565/chapter-$ch | pup '#chapterText' )
     if [[ ${#data} -gt 0 ]]; then
-        echo $data > $TBATE/$ch.html
-        title=$( echo $data | pup ':contains("Chapter '$ch'") text{}' | tr '\n' ' '|awk '{$1=$1};1' )
-        pandoc -f html -t epub3 --metadata title="$title" -o $TBATE/$ch.epub $TBATE/$ch.html
-        rm $TBATE/$ch.html
+        echo "$data" > "$TBATE/$ch.html"
+        title=$( echo "$data" | pup ':contains("Chapter '$ch'") text{}' | tr '\n' ' '|awk '{$1=$1};1' )
+        pandoc -f html -t epub3 --metadata title="$title" -o "$TBATE/$ch.epub" "$TBATE/$ch.html"
+        rm "$TBATE/$ch.html"
         printf "${CYAN}Downloaded${NC} ${GREEN}$ch - $title${NC}\n"
     else
         printf "${RED}$ch${NC} ${CYAN}Not Released Yet${NC}\n"
