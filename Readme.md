@@ -25,5 +25,5 @@ To get the exact usage instructions of a script, refer to the readme of the resp
 - [Manga Related Scripts](./Manga%20Related) - Manga and Light Novel related scripts.
   - [mal](./Manga%20Related/mal) - A quick and dirty bash script to scrape rating and synopsis of a manga from [MyAnimeList](https://myanimelist.net/)
   - [tachi-tog](./Manga%20Related/tachi-tog) - Script used to download Tower of God chapters for reading in tachiyomi. To be used with termux.
-  - [tbate](./Manga%20Related/tbate) - Script to download The Beginnign After the End Light Novel Chapters.
-  
+  - [tbate](./Manga%20Related/tbate) - Script to download The Beginning After the End Light Novel Chapters.
+- [SpotiSync](./SpotiSync/) - Script to sync locally downloaded music with a Spotify playlist.
