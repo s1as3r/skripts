@@ -2,6 +2,8 @@
 
 Get names of anime episodes and also check if an episode is filler or not.
 
+Can also be used to rename episodes to their titles.
+
 I know there are a lot of things that could be done in a better way (argument parsing etc)
 but this works just fine and I'm too lazy.
 

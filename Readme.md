@@ -10,11 +10,11 @@ Some of these scipts might have become obsolete at some point and might not work
 
 Before running a script make sure to install it's dependencies.
 
-Most of these scripts are writeen in python so, usually it's done by just running `pip install -r requirements.txt` inside its folder.
+Most of these scripts are written in python so, usually it's done by just running `pip install -r requirements.txt` inside its folder.
 
-If it's a bash script or a script written in some other lang, refer the readme or look around inside the script itself.
+If it's a bash script or a script written in some other lang, refer to the readme or look around inside the script itself.
 
-To get the exact usage instructions of a script, refer to the readme of the respsctive script.
+To get the exact usage instructions of a script, refer to the readme of the respective script.
 
 ## Contents
 

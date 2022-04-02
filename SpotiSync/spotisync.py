@@ -11,7 +11,7 @@ from typing import Callable, List, NamedTuple
 import spotdl.download as spotdl
 from spotdl.search import SpotifyClient, from_spotify_url
 
-PLAYLIST_RE = re.compile("https?://open.spotify.com/playlist/*")
+PLAYLIST_RE = re.compile("https?://open\.spotify\.com/playlist/*")
 
 SpotifyClient.init(
     client_id="9fec59cd741a4692b5ae2ccb84a725af",
@@ -97,6 +97,10 @@ def download(tracks: List[Song]):
             downloader.download_multiple_songs(song_list)
 
 
+def _sanitize_filename(name: str) -> str:
+    return "".join(c for c in name if c not in '\\/*?"<>|').replace(":", " - ")
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="SpotiSync", description="Sync local tracks with a spotify playlist."
@@ -151,10 +155,18 @@ def main():
             title=s.title,
             album=s.album,
         )
-        if platform.system() == "Windows":
-            name = "".join(c for c in name if c not in '\\/*?"<>|').replace(":", " - ")
+        alt_name = args.template.format(
+            artists=", ".join(i for i in s.artists if i.lower() not in s.title.lower()),
+            artist=s.artists[0],
+            title=s.title,
+            album=s.album,
+        )
 
-        return local_name == name.lower()
+        if platform.system() == "Windows":
+            name = _sanitize_filename(name)
+            alt_name = _sanitize_filename(alt_name)
+
+        return local_name == name.lower() or local_name == alt_name.lower()
 
     diff = get_diff(local_tracks, playlist_tracks, validator)
 
@@ -173,11 +185,14 @@ def main():
     for track in diff.to_download:
         downloaded.append(f"{', '.join(track.artists)} - {track.title}")
 
-    print("Deleted:")
-    pprint(deleted)
+    if downloaded or deleted:
+        print("Deleted:")
+        pprint(deleted)
 
-    print("Downloaded:")
-    pprint(downloaded)
+        print("Downloaded:")
+        pprint(downloaded)
+    else:
+        print(f"{directory} already in sync with spotify playlist")
 
 
 if __name__ == "__main__":
