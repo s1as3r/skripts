@@ -1,11 +1,11 @@
 #! /usr/bin/python3
 import argparse
+import os
 import platform
-from pprint import pprint
 import re
 from functools import partial
-import os
 from pathlib import Path
+from pprint import pprint
 from typing import Callable, List, NamedTuple
 
 import spotdl.download as spotdl
