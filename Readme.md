@@ -27,3 +27,4 @@ To get the exact usage instructions of a script, refer to the readme of the resp
   - [tachi-tog](./Manga%20Related/tachi-tog) - Script used to download Tower of God chapters for reading in tachiyomi. To be used with termux.
   - [tbate](./Manga%20Related/tbate) - Script to download The Beginning After the End Light Novel Chapters.
 - [SpotiSync](./SpotiSync/) - Script to sync locally downloaded music with a Spotify playlist.
+- [GriDL](./gridl) - Script to download grids for steam games.

@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "gridl"
+version = "0.1.0"
+description = ""
+authors = ["Arbaaz Shafiq <arbaazshafiq@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+steam = "^1.4.4"
+python-steamgriddb = "^1.0.5"
+requests = "^2.31.0"
+python-decouple = "^3.8"
+
+[tool.poetry.scripts]
+gridl = "gridl.main:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
