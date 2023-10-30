@@ -28,3 +28,4 @@ To get the exact usage instructions of a script, refer to the readme of the resp
   - [tbate](./Manga%20Related/tbate) - Script to download The Beginning After the End Light Novel Chapters.
 - [SpotiSync](./SpotiSync/) - Script to sync locally downloaded music with a Spotify playlist.
 - [GriDL](./gridl) - Script to download grids for steam games.
+- [`rmv`](https://github.com/s1as3r/rmv) - `r`egex `mv`
