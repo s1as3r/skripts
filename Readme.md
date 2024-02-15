@@ -29,3 +29,4 @@ To get the exact usage instructions of a script, refer to the readme of the resp
 - [SpotiSync](./SpotiSync/) - Script to sync locally downloaded music with a Spotify playlist.
 - [GriDL](./gridl) - Script to download grids for steam games.
 - [`rmv`](https://github.com/s1as3r/rmv) - `r`egex `mv`
+- [hltb](https://github.com/s1as3r/hltb) - how long to beat?
