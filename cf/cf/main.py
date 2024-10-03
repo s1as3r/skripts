@@ -18,8 +18,8 @@ def get_parser() -> ArgumentParser:
     return parser
 
 
-def count_files(dir: Path) -> int:
-    return sum(i.is_file() for i in dir.glob("**/*"))
+def count_files(directory: Path) -> int:
+    return sum(i.is_file() for i in directory.glob("**/*"))
 
 
 def main():
