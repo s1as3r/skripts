@@ -30,3 +30,4 @@ To get the exact usage instructions of a script, refer to the readme of the resp
 - [GriDL](./gridl) - download grids for steam games.
 - [hltb](https://github.com/s1as3r/hltb) - how long to beat?
 - [cf](./cf) - count the files in a directory - recursively.
+- [love src](./love_src) - get the source code of a love game from its .exe

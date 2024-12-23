@@ -1,0 +1,10 @@
+[project]
+name = "love-src"
+version = "0.1.0"
+description = "get the source code of a love game from its .exe"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+love_src = "main:main"
